@@ -1,0 +1,308 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>SK Furniture Billing System</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', sans-serif;
+            background: #000000;
+            padding: 20px;
+        }
+
+        .bill-box {
+            max-width: 900px;
+            margin: auto;
+            background: #494949;
+            padding: 30px;
+            border-radius: 14px;
+            box-shadow: 0 12px 30px rgba(0,0,0,0.1);
+        }
+
+        .logo {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 15px;
+        }
+
+        .logo img {
+            width: 95px;
+        }
+
+        h1 {
+            text-align: center;
+            color: #ffffff;
+            margin: 5px 0;
+        }
+
+        .subtitle {
+            text-align: center;
+            color: #ffffff;
+            margin-bottom: 25px;
+        }
+
+        .info {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            font-size: 15px;
+            color: #ffffff;
+        }
+
+        .info input {
+            width: 160px;
+            padding: 4px;
+            border-radius: 5px;
+            border: 1.5px solid #ffffff;
+            background: #494949; /* SAME as bill background */
+            color: #ffffff; /* White text */
+            text-align: center;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 20px;
+        }
+
+        th {
+            background: #4e9bff;
+            color: #ffffff;
+            padding: 12px;
+        }
+
+        td {
+            border: 1px solid #ffffff;
+            padding: 8px;
+            text-align: center;
+            color: #ffffff;
+            vertical-align: middle;
+        }
+
+        input {
+            width: 90%;
+            padding: 7px;
+            border-radius: 6px;
+            border: 2px solid #000;
+            text-align: center;
+            background: #ffffff;
+            color: #000000;
+        }
+
+        .delete-btn {
+            background: #f13723;
+            color: white;
+            border: none;
+            padding: 6px 12px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 14px;
+        }
+
+        .delete-btn:hover {
+            background: #c0392b;
+        }
+
+        .total-section {
+            text-align: right;
+            margin-top: 20px;
+            font-size: 22px;
+            color: #4fcd7f;
+        }
+
+        .buttons {
+            text-align: center;
+            margin-top: 25px;
+        }
+
+        button {
+            background: #4e9bff;
+            color: white;
+            border: none;
+            padding: 12px 22px;
+            margin: 5px;
+            font-size: 16px;
+            border-radius: 8px;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background: #000;
+        }
+
+        .row-total {
+            color: #ffffff;
+        }
+
+        /* Stamp & Signature */
+        .signature-section {
+            margin-top: 70px;
+            display: none;
+            justify-content: flex-end;
+        }
+
+        .stamp {
+            width: 200px;
+            text-align: center;
+            font-size: 16px;
+            font-weight: bold;
+            color: #000;
+        }
+
+        .developer {
+            margin-top: 30px;
+            text-align: center;
+            font-size: 14px;
+            color: #ffffff;
+            opacity: 0.8;
+        }
+
+        /* App Install Popup */
+        .app-popup {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background: #4e9bff;
+            color: white;
+            padding: 15px 20px;
+            border-radius: 10px;
+            box-shadow: 0 6px 20px rgba(0,0,0,0.3);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            max-width: 300px;
+            font-size: 14px;
+            z-index: 1000;
+        }
+
+        .app-popup button {
+            background: white;
+            color: #4e9bff;
+            font-weight: bold;
+            padding: 6px 12px;
+            border-radius: 6px;
+        }
+
+        .app-popup button:hover {
+            background: #f0f0f0;
+        }
+
+        @media print {
+            button, .delete-btn, .developer, .app-popup {
+                display: none;
+            }
+
+            body {
+                background: white;
+            }
+
+            input {
+                border: none;
+                outline: none;
+                background: white;
+                color: black;
+            }
+
+            .signature-section {
+                display: flex;
+                justify-content: first baseline;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="bill-box">
+
+    <div class="logo">
+        <img src="file:///C:/Users/Himanshu%20Panchal/OneDrive/Desktop/img/mysklogo.png" alt="SK Furniture Logo">
+    </div>
+
+    <h1>SK Furniture Billing System</h1>
+    <div class="subtitle">Professional Billing System Software</div>
+
+    <div class="info">
+        <div><strong>Shop:</strong> SK Furniture</div>
+
+        <div>
+            <strong>Customer:</strong>
+            <input type="text" id="customerName" placeholder="Customer name">
+        </div>
+
+        <div><strong>Date:</strong> <span id="date"></span></div>
+    </div>
+
+    <table>
+        <thead>
+            <tr>
+                <th>Product Name</th>
+                <th>Price (₹)</th>
+                <th>Quantity</th>
+                <th>Total (₹)</th>
+                <th>Delete</th>
+            </tr>
+        </thead>
+        <tbody id="tableBody">
+            <tr>
+                <td><input type="text" placeholder="Chair / Sofa"></td>
+                <td><input type="number" class="price"></td>
+                <td><input type="number" class="qty"></td>
+                <td class="row-total">0</td>
+                <td><button class="delete-btn" onclick="deleteRow(this)">🗑️</button></td>
+            </tr>
+        </tbody>
+    </table>
+
+    <div class="total-section">
+        Grand Total: ₹ <span id="grandTotal">0</span>
+    </div>
+
+    <div class="buttons">
+        <button onclick="addRow()">+ Add Product</button>
+        <button onclick="calculateBill()">Calculate</button>
+        <button onclick="window.print()">Print / Save as PDF</button>
+    </div>
+
+    <div class="signature-section">
+        <div class="stamp">
+            Stamp & Signature<br>
+            SK Furniture
+        </div>
+    </div>
+
+    <div class="developer">
+        Developed by <strong>Himanshu Panchal</strong>
+    </div>
+
+</div>
+
+<!-- App Install Popup -->
+<div class="app-popup" id="appPopup">
+    Install our Mobile App! 
+    <button onclick="downloadApp()">Download</button>
+    <span style="margin-left:10px; cursor:pointer;" onclick="closePopup()">✖</span>
+</div>
+
+<script>
+function downloadApp() {
+    // Replace the URL with your hosted APK link
+    const apkUrl = "https://yourdomain.com/SKFurnitureBilling.apk";
+    window.location.href = apkUrl;  // starts download
+}
+
+function closePopup() {
+    document.getElementById("appPopup").style.display = "none";
+}
+
+// Optional: Hide popup after 10 seconds
+setTimeout(() => {
+    const popup = document.getElementById("appPopup");
+    if (popup) popup.style.display = "none";
+}, 10000);
+</script>
+
+
+</body>
+</html>
